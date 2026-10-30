@@ -1,0 +1,75 @@
+﻿=== Predcheck Verification on d1.csv to d6.csv ===
+Predicate : weight <= 0 || distance <= 0
+Clauses   : c1 = weight <= 0   c2 = distance <= 0
+
+  test 1  weight=0, distance=100                   clauses=TF  predicate=T
+  test 2  weight=10, distance=0                    clauses=FT  predicate=T
+  test 3  weight=20, distance=600                  clauses=FF  predicate=F
+
+PC  : satisfied
+CC  : satisfied
+GACC: satisfied
+CACC: satisfied
+RACC: satisfied
+Predicate : weight > 50 || distance > 2000
+Clauses   : c1 = weight > 50   c2 = distance > 2000
+
+  test 1  weight=55, distance=100                  clauses=TF  predicate=T
+  test 2  weight=10, distance=2500                 clauses=FT  predicate=T
+  test 3  weight=20, distance=600                  clauses=FF  predicate=F
+
+PC  : satisfied
+CC  : satisfied
+GACC: satisfied
+CACC: satisfied
+RACC: satisfied
+Predicate : weight > 10 && distance > 500
+Clauses   : c1 = weight > 10   c2 = distance > 500
+
+  test 1  weight=20, distance=600                  clauses=TT  predicate=T
+  test 2  weight=20, distance=300                  clauses=TF  predicate=F
+  test 3  weight=4, distance=600                   clauses=FT  predicate=F
+  test 4  weight=4, distance=100                   clauses=FF  predicate=F
+
+PC  : satisfied
+CC  : satisfied
+GACC: satisfied
+CACC: satisfied
+RACC: satisfied
+Predicate : weight > 10 || distance > 500
+Clauses   : c1 = weight > 10   c2 = distance > 500
+
+  test 1  weight=20, distance=300                  clauses=TF  predicate=T
+  test 2  weight=4, distance=600                   clauses=FT  predicate=T
+  test 3  weight=4, distance=100                   clauses=FF  predicate=F
+
+PC  : satisfied
+CC  : satisfied
+GACC: satisfied
+CACC: satisfied
+RACC: satisfied
+Predicate : express && (!member || weight > 5)
+Clauses   : c1 = express   c2 = member   c3 = weight > 5
+
+  test 1  express=True, member=True, weight=20     clauses=TTT  predicate=T
+  test 2  express=False, member=True, weight=20    clauses=FTT  predicate=F
+  test 3  express=True, member=False, weight=4     clauses=TFF  predicate=T
+  test 4  express=True, member=True, weight=4      clauses=TTF  predicate=F
+
+PC  : satisfied
+CC  : satisfied
+GACC: satisfied
+CACC: satisfied
+RACC: satisfied
+Predicate : member && fee >= 250
+Clauses   : c1 = member   c2 = fee >= 250
+
+  test 1  member=True, fee=450                     clauses=TT  predicate=T
+  test 2  member=True, fee=180                     clauses=TF  predicate=F
+  test 3  member=False, fee=330                    clauses=FT  predicate=F
+
+PC  : satisfied
+CC  : satisfied
+GACC: satisfied
+CACC: satisfied
+RACC: satisfied

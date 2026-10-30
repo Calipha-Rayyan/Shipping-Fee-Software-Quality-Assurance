@@ -1,0 +1,9 @@
+# Configuration for mutmut (Part C). Run from this folder:  mutmut run
+#
+# Change the test file below to choose WHICH of your suites is judged by the
+# mutants, e.g. "tests/test_nc.py" or "tests/test_racc.py". Delete the folder
+# `mutants/` (and re-run) after you change it.
+[tool.mutmut]
+source_paths = ["shipping_ref.py"]
+pytest_add_cli_args_test_selection = ["tests/test_racc.py"]
+also_copy = ["target.py", "faults", "tests"]

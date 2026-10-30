@@ -1,0 +1,11 @@
+# Install inside a virtual environment:
+#   python -m venv .venv
+#   source .venv/bin/activate        (Windows: .venv\Scripts\activate)
+#   pip install -r requirements.txt
+#
+# PyUnit (unittest) is part of the standard library. pytest is only needed by mutmut.
+pytest
+coverage          # statement and branch coverage (Part C)
+py2cfg            # control flow graph of Python code (Part A). Also needs Graphviz installed
+pymcdc            # MC/DC requirement analysis for Python (Part C)
+mutmut            # mutation testing for Python (Part C/E)

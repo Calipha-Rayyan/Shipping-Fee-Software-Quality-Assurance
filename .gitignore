@@ -1,0 +1,58 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+ENV/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+.pytest_cache/
+.coverage
+htmlcov/
+.mutmut-cache/
+
+# Java
+out/
+target/
+*.class
+*.exec
+jacoco-report/
+.gradle/
+
+# Allow JARs in java/lib (JUnit and JaCoCo dependencies)
+!java/lib/*.jar
+
+# IDEs and Editors
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.project
+.classpath
+.settings/
+
+# OS generated
+.DS_Store
+Thumbs.db
+desktop.ini
+
+tools/graphviz/
+

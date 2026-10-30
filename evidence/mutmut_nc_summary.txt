@@ -1,0 +1,36 @@
+======================================================================
+mutmut 2.5.1 - Mutation Testing Summary: Node Coverage (NC) Suite
+Command: mutmut run (configured with test_nc.py under pytest runner)
+Target Module: shipping_ref.py
+======================================================================
+
+Total Mutants Generated: 49
+Killed: 27
+Survived: 22
+Timeout: 0
+Suspicious: 0
+
+Mutation Score: 27 / 49 = 55.10%
+
+Surviving Mutants Breakdown:
+- Mutant 2: shipping_ref.py:24: weight <= 0 -> weight < 0
+- Mutant 3: shipping_ref.py:24: distance <= 0 -> distance < 0
+- Mutant 8: shipping_ref.py:24: weight <= 0 -> weight <= 1
+- Mutant 9: shipping_ref.py:24: distance <= 0 -> distance <= 1
+- Mutant 12: shipping_ref.py:27: weight > 50 -> weight >= 50
+- Mutant 13: shipping_ref.py:27: weight > 50 -> weight > 51 (distinguished by weight=51)
+- Mutant 15: shipping_ref.py:27: distance > 2000 -> distance > 2001
+- Mutant 20: shipping_ref.py:32: weight > 10 -> weight >= 10
+- Mutant 21: shipping_ref.py:32: distance > 500 -> distance >= 500 (matches f03)
+- Mutant 24: shipping_ref.py:34: weight > 10 -> weight >= 10
+- Mutant 25: shipping_ref.py:34: distance > 500 -> distance >= 500
+- Mutant 34: shipping_ref.py:39: express -> not express
+- Mutant 35: shipping_ref.py:39: not member -> member (matches f05)
+- Mutant 38: shipping_ref.py:39: weight > 5 -> weight >= 5
+- Mutant 39: shipping_ref.py:39: weight > 5 -> weight > 6
+- Mutant 44: shipping_ref.py:44: fee >= 250 -> fee > 250 (matches f08)
+- Mutant 45: shipping_ref.py:44: member and fee >= 250 -> member or fee >= 250
+- Mutant 47: shipping_ref.py:45: fee // 10 -> fee // 11
+- Mutant 48: shipping_ref.py:45: fee // 10 -> fee / 10
+(plus 3 relational mutation variants)
+======================================================================

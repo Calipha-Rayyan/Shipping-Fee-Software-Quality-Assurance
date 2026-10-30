@@ -1,0 +1,58 @@
+﻿Line number: (27, 7)
+Decision: weight <= 0 or distance <= 0
+Combinations to be covered: 
+    | Result.   weight <= 0    distance <= 0   Cover. 
+------------------------------------------------------
+  1 |  False       False           False        True  
+  2 |   True       True            ----         True  
+  3 |   True       False           True         True  
+
+Line number: (29, 7)
+Decision: weight > 50 or distance > 2000
+Combinations to be covered: 
+    | Result.   weight > 50    distance > 2000   Cover. 
+--------------------------------------------------------
+  1 |  False       False            False         True  
+  2 |   True       True             ----          True  
+  3 |   True       False            True          True  
+
+Line number: (32, 7)
+Decision: weight > 10 and distance > 500
+Combinations to be covered: 
+    | Result.   weight > 10    distance > 500   Cover. 
+-------------------------------------------------------
+  1 |  False       True            False         True  
+  2 |  False       False            ----         True  
+  3 |   True       True             True         True  
+
+Line number: (34, 9)
+Decision: weight > 10 or distance > 500
+Combinations to be covered: 
+    | Result.   weight > 10    distance > 500   Cover. 
+-------------------------------------------------------
+  1 |  False       False           False         True  
+  2 |   True       True             ----         True  
+  3 |   True       False            True         True  
+
+Line number: (36, 7)
+Decision: express and (not member or weight > 5)
+Combinations to be covered: 
+    | Result.   express    member    weight > 5   Cover. 
+---------------------------------------------------------
+  1 |  False     False     False        ----       True  
+  2 |   True     True      False        ----       True  
+  3 |  False     True       True       False       True  
+  4 |   True     True       True        True       True  
+
+Line number: (38, 7)
+Decision: member and fee >= 250
+Combinations to be covered: 
+    | Result.   member    fee >= 250   Cover. 
+----------------------------------------------
+  1 |  False     True       False       True  
+  2 |  False    False        ----       True  
+  3 |   True     True        True       True  
+
+
+Covered 19 out of 19 requirements in 6 decisions (100%)
+	      

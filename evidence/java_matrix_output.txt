@@ -1,0 +1,16 @@
+﻿
+fault nc     ec     pc     cc     cacc   racc   extra  
+tests 4      5      5      5      8      8      2      
+f01   KILL   KILL   KILL   .      KILL   KILL   .      
+f02   .      .      .      .      KILL   KILL   .      
+f03   .      .      .      .      .      .      KILL   
+f04   .      .      .      KILL   KILL   KILL   .      
+f05   .      .      .      .      KILL   KILL   .      
+f06   KILL   KILL   KILL   KILL   KILL   KILL   KILL   
+f07   .      .      .      .      KILL   KILL   .      
+f08   .      .      .      .      .      .      KILL   
+f09   KILL   KILL   KILL   KILL   KILL   KILL   KILL   
+f10   .      .      .      .      .      .      .      
+killed3      3      3      3      7      7      4      
+
+Survived every valid suite: f10
