@@ -56,3 +56,7 @@ desktop.ini
 
 tools/graphviz/
 
+
+# Archives
+*.zip
+
