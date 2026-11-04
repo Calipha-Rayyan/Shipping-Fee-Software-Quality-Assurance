@@ -1,0 +1,95 @@
+"""Script to package all deliverables into CS483_Assignment1_Submission.zip.
+"""
+import os
+import zipfile
+
+FILES_TO_PACK = [
+    "CS483_Assignment1_Report.pdf",
+    "README.md",
+    "cfg_hand_derived.png",
+    "generate_report.py",
+    "evidence/coverage_nc.txt",
+    "evidence/coverage_racc.txt",
+    "evidence/jacoco_ec.csv",
+    "evidence/jacoco_nc.csv",
+    "evidence/jacoco_racc.csv",
+    "evidence/java_matrix_output.txt",
+    "evidence/mutmut_nc_summary.txt",
+    "evidence/mutmut_racc_summary.txt",
+    "evidence/predcheck_output.txt",
+    "evidence/pymcdc_output.txt",
+    "evidence/python_matrix_output.txt",
+    "java/fee.dot",
+    "java/fee.png",
+    "java/lib/hamcrest-core-1.3.jar",
+    "java/lib/jacocoagent.jar",
+    "java/lib/jacococli.jar",
+    "java/lib/junit-4.13.2.jar",
+    "java/pom.xml",
+    "java/run.sh",
+    "java/src/main/java/shipping/ShippingF01.java",
+    "java/src/main/java/shipping/ShippingF02.java",
+    "java/src/main/java/shipping/ShippingF03.java",
+    "java/src/main/java/shipping/ShippingF04.java",
+    "java/src/main/java/shipping/ShippingF05.java",
+    "java/src/main/java/shipping/ShippingF06.java",
+    "java/src/main/java/shipping/ShippingF07.java",
+    "java/src/main/java/shipping/ShippingF08.java",
+    "java/src/main/java/shipping/ShippingF09.java",
+    "java/src/main/java/shipping/ShippingF10.java",
+    "java/src/main/java/shipping/ShippingRef.java",
+    "java/src/main/java/shipping/Target.java",
+    "java/src/test/java/shipping/ClauseCoverageTest.java",
+    "java/src/test/java/shipping/CorrelatedActiveClauseCoverageTest.java",
+    "java/src/test/java/shipping/EdgeCoverageTest.java",
+    "java/src/test/java/shipping/ExtraTest.java",
+    "java/src/test/java/shipping/NodeCoverageTest.java",
+    "java/src/test/java/shipping/PredicateCoverageTest.java",
+    "java/src/test/java/shipping/RestrictedActiveClauseCoverageTest.java",
+    "java/src/test/java/shipping/RunMatrix.java",
+    "java/tools/bytecode_cfg.py",
+    "python/faults/__init__.py",
+    "python/faults/f01.py",
+    "python/faults/f02.py",
+    "python/faults/f03.py",
+    "python/faults/f04.py",
+    "python/faults/f05.py",
+    "python/faults/f06.py",
+    "python/faults/f07.py",
+    "python/faults/f08.py",
+    "python/faults/f09.py",
+    "python/faults/f10.py",
+    "python/predcheck_csvs/d1.csv",
+    "python/predcheck_csvs/d2.csv",
+    "python/predcheck_csvs/d3.csv",
+    "python/predcheck_csvs/d4.csv",
+    "python/predcheck_csvs/d5.csv",
+    "python/predcheck_csvs/d6.csv",
+    "python/pyproject.toml",
+    "python/requirements.txt",
+    "python/run_matrix.py",
+    "python/shipping_cfg.png",
+    "python/shipping_ref.py",
+    "python/shipping_ref.py.mdc",
+    "python/target.py",
+    "python/tests/__init__.py",
+    "python/tests/test_cacc.py",
+    "python/tests/test_cc.py",
+    "python/tests/test_ec.py",
+    "python/tests/test_extra.py",
+    "python/tests/test_nc.py",
+    "python/tests/test_pc.py",
+    "python/tests/test_racc.py",
+    "python/tools/predcheck.py",
+]
+
+def repack(zip_filename="CS483_Assignment1_Submission.zip"):
+    with zipfile.ZipFile(zip_filename, "w", compression=zipfile.ZIP_DEFLATED) as z:
+        for rel_path in FILES_TO_PACK:
+            if not os.path.exists(rel_path):
+                raise FileNotFoundError(f"Missing file: {rel_path}")
+            z.write(rel_path, arcname=rel_path)
+    print(f"Successfully repacked {len(FILES_TO_PACK)} files into {zip_filename}")
+
+if __name__ == "__main__":
+    repack()

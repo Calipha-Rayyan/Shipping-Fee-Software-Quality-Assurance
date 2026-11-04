@@ -1,9 +1,10 @@
 """Script to generate the final CS 483 Assignment 1 PDF report using ReportLab.
-Conforms strictly to the 12-page limit and covers all tasks A1-E.
-Uses Times-Roman font, includes both team members, and incorporates all three diagrams:
+Conforms strictly to the 12-page limit (exactly 10 pages) and covers all tasks A1-E.
+Uses Times-Roman font, includes both team members, larger human-readable font sizes,
+and incorporates all three diagrams at their natural aspect ratios with clear flow explanations:
 1. Figure A1: Hand-derived CFG (A1 - Non-code drawing model)
-2. Figure A2: Python AST CFG (A3 - py2cfg tool-generated)
-3. Figure A3: Java Bytecode CFG (A3 - bytecode_cfg.py tool-generated)
+2. Figure A2: Python AST CFG (A3 - py2cfg tool-generated, landscape)
+3. Figure A3: Java Bytecode CFG (A3 - bytecode_cfg.py tool-generated, vertical)
 """
 import os
 import sys
@@ -53,87 +54,84 @@ def build_pdf(filename="CS483_Assignment1_Report.pdf"):
         pagesize=letter,
         leftMargin=36,
         rightMargin=36,
-        topMargin=36,
-        bottomMargin=46
+        topMargin=34,
+        bottomMargin=44
     )
 
     styles = getSampleStyleSheet()
     
-    # Custom styles using Times-Roman font family
+    # Enhanced typography using Times-Roman font family with comfortable reading sizes
     title_style = ParagraphStyle(
         'DocTitle', parent=styles['Normal'],
-        fontName='Times-Bold', fontSize=17, leading=21,
+        fontName='Times-Bold', fontSize=18, leading=22,
         textColor=colors.HexColor('#1a365d'), spaceAfter=3
     )
     subtitle_style = ParagraphStyle(
         'DocSubTitle', parent=styles['Normal'],
-        fontName='Times-Bold', fontSize=11, leading=14,
-        textColor=colors.HexColor('#2b6cb0'), spaceAfter=6
+        fontName='Times-Bold', fontSize=12, leading=15,
+        textColor=colors.HexColor('#2b6cb0'), spaceAfter=5
     )
     meta_style = ParagraphStyle(
         'Meta', parent=styles['Normal'],
-        fontName='Times-Roman', fontSize=8.5, leading=11,
-        textColor=colors.HexColor('#2d3748'), spaceAfter=8
+        fontName='Times-Roman', fontSize=9, leading=12.5,
+        textColor=colors.HexColor('#2d3748'), spaceAfter=6
     )
     h1_style = ParagraphStyle(
         'Heading1_Custom', parent=styles['Normal'],
-        fontName='Times-Bold', fontSize=11.5, leading=14.5,
-        textColor=colors.HexColor('#1a365d'), spaceBefore=7, spaceAfter=3,
+        fontName='Times-Bold', fontSize=12.5, leading=15.5,
+        textColor=colors.HexColor('#1a365d'), spaceBefore=6, spaceAfter=3,
         keepWithNext=True
     )
     h2_style = ParagraphStyle(
         'Heading2_Custom', parent=styles['Normal'],
-        fontName='Times-Bold', fontSize=9.5, leading=12.5,
+        fontName='Times-Bold', fontSize=10.5, leading=13.5,
         textColor=colors.HexColor('#2d3748'), spaceBefore=5, spaceAfter=2.5,
         keepWithNext=True
     )
     body_style = ParagraphStyle(
         'Body_Custom', parent=styles['Normal'],
-        fontName='Times-Roman', fontSize=8.5, leading=11,
-        textColor=colors.HexColor('#2d3748'), spaceAfter=3.5
+        fontName='Times-Roman', fontSize=9.2, leading=12.5,
+        textColor=colors.HexColor('#2d3748'), spaceAfter=3
     )
     bullet_style = ParagraphStyle(
         'Bullet_Custom', parent=styles['Normal'],
-        fontName='Times-Roman', fontSize=8.5, leading=11,
+        fontName='Times-Roman', fontSize=9.2, leading=12.5,
         textColor=colors.HexColor('#2d3748'), leftIndent=12, spaceAfter=2
-    )
-    code_style = ParagraphStyle(
-        'Code_Custom', parent=styles['Normal'],
-        fontName='Courier', fontSize=7.5, leading=9.5,
-        textColor=colors.HexColor('#1a202c')
     )
     tbl_header = ParagraphStyle(
         'TblHdr', parent=styles['Normal'],
-        fontName='Times-Bold', fontSize=7.5, leading=9.5,
+        fontName='Times-Bold', fontSize=8, leading=10.5,
         textColor=colors.white
     )
     tbl_cell = ParagraphStyle(
         'TblCell', parent=styles['Normal'],
-        fontName='Times-Roman', fontSize=7.5, leading=9.5,
+        fontName='Times-Roman', fontSize=8, leading=10.5,
         textColor=colors.HexColor('#1a202c')
     )
     tbl_cell_bold = ParagraphStyle(
         'TblCellB', parent=styles['Normal'],
-        fontName='Times-Bold', fontSize=7.5, leading=9.5,
+        fontName='Times-Bold', fontSize=8, leading=10.5,
         textColor=colors.HexColor('#1a202c')
+    )
+    caption_style = ParagraphStyle(
+        'FigCaption', parent=styles['Normal'],
+        fontName='Times-BoldItalic', fontSize=9.5, leading=13,
+        textColor=colors.HexColor('#1a365d'), alignment=1, spaceAfter=3
     )
 
     story = []
 
-    # Title Banner with Both Team Members
+    # =========================================================================
+    # PAGE 1: Title Banner & Part A1 (Structural Table and Edge List)
+    # =========================================================================
     story.append(Paragraph("CS 483: Software Quality Assurance - Assignment 1", title_style))
     story.append(Paragraph("From Coverage Criteria to Working Tools: Testing the ShippingFee Program", subtitle_style))
     story.append(Paragraph("<b>Team Members:</b> Muhammad Rayyan Bhatti (ID: 04072312024 - Java/JUnit Lead) &nbsp;|&nbsp; Haider Ali Khan (Python/PyUnit Lead)<br/><b>Course:</b> CS 483 Software Quality Assurance &nbsp;|&nbsp; <b>Due Date:</b> November 5, 2026", meta_style))
-    story.append(HRFlowable(width="100%", thickness=1, color=colors.HexColor('#cbd5e0'), spaceAfter=6))
+    story.append(HRFlowable(width="100%", thickness=1, color=colors.HexColor('#cbd5e0'), spaceAfter=5))
 
-    # =========================================================================
-    # Part A: Graph Coverage
-    # =========================================================================
     story.append(Paragraph("Part A: Graph Coverage (4 Marks)", h1_style))
-    
-    # A1
     story.append(Paragraph("A1. Control Flow Graph Construction and Node/Edge Identification", h2_style))
-    story.append(Paragraph("The control flow graph for Algorithm 1 (<code>ShippingFee</code>) was modeled using canonical nodes <i>n1</i> to <i>n14</i>, with decision nodes at every predicate and action nodes for assignments and exits. Below is the complete structural identification table alongside the hand-derived control flow graph:", body_style))
+    story.append(Paragraph("The control flow graph for Algorithm 1 (<code>ShippingFee</code>) was modeled using canonical nodes <i>n1</i> to <i>n14</i>, with decision nodes at every predicate and action nodes for assignments and exits. Below is the complete structural identification table:", body_style))
     
     a1_data = [
         [Paragraph("Node", tbl_header), Paragraph("Type", tbl_header), Paragraph("Code Segment / Operation", tbl_header), Paragraph("Outgoing Transitions", tbl_header)],
@@ -163,26 +161,36 @@ def build_pdf(filename="CS483_Assignment1_Report.pdf"):
     story.append(t_a1)
     story.append(Spacer(1, 3))
     story.append(Paragraph("<b>CFG Edge List:</b> <i>E</i> = {(n1, n2), (n1, n3), (n3, n4), (n3, n5), (n5, n6), (n6, n7), (n6, n8), (n7, n10), (n8, n9), (n8, n10), (n9, n10), (n10, n11), (n10, n12), (n11, n12), (n12, n13), (n12, n14), (n13, n14)}. <b>Total Nodes: |N| = 14, Total Edges: |E| = 17.</b>", body_style))
-    story.append(Spacer(1, 3))
 
-    # Hand-derived Diagram 1 (Non-code drawing)
+    # =========================================================================
+    # PAGE 2: Figure A1 (Hand-derived Flowchart CFG) & Execution Flow Walkthrough
+    # =========================================================================
     hand_img_path = "D:/SQA/starter_kit/cfg_hand_derived.png"
     if os.path.exists(hand_img_path):
+        story.append(PageBreak())
+        story.append(Paragraph("Figure A1: Hand-Derived Specification Flowchart Control Flow Graph (A1 Model)", caption_style))
         t_hand = Table([
-            [Paragraph("<b>Figure A1: Hand-Derived Specification Control Flow Graph (A1 - Flowchart Model)</b>", tbl_cell_bold)],
-            [Image(hand_img_path, width=3.6*inch, height=4.2*inch)]
+            [Image(hand_img_path, width=3.85*inch, height=5.85*inch)]
         ], colWidths=[540])
         t_hand.setStyle(TableStyle([
             ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
             ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
-            ('TOPPADDING', (0, 0), (-1, 0), 2),
-            ('BOTTOMPADDING', (0, 0), (-1, 0), 2),
-            ('BOTTOMPADDING', (0, 1), (-1, 1), 2),
+            ('TOPPADDING', (0, 0), (-1, -1), 0),
+            ('BOTTOMPADDING', (0, 0), (-1, -1), 2),
         ]))
-        story.append(KeepTogether(t_hand))
-        story.append(Spacer(1, 4))
+        story.append(t_hand)
+        story.append(Spacer(1, 3))
+        story.append(Paragraph("<b>Execution Flow and Control Logic in Figure A1:</b><br/>"
+                               "&bull; <b>Input Validation Phase (n1, n3):</b> Flow enters at <i>n1</i>. If <code>weight &lt;= 0</code> or <code>distance &lt;= 0</code> (D1=True), the parcel is immediately rejected at terminal node <i>n2</i> with error code <b>-1 (INVALID)</b>. Otherwise (D1=False), flow advances to <i>n3</i>. If <code>weight &gt; 50</code> or <code>distance &gt; 2000</code> (D2=True), the parcel is refused at terminal node <i>n4</i> with error code <b>-2 (REFUSED)</b>.<br/>"
+                               "&bull; <b>Base Rate Initialization (n5):</b> Valid parcels reach <i>n5</i> where the baseline fee is initialized to <code>fee = 100</code>.<br/>"
+                               "&bull; <b>Distance and Weight Surcharge Cascades (n6..n9):</b> Decision <i>n6</i> tests if the parcel is heavy and long-distance (<code>weight &gt; 10 and distance &gt; 500</code>). If True, <i>n7</i> applies a <b>200</b> surcharge (fee = 300) and merges to <i>n10</i>. If False, fallback decision <i>n8</i> tests if either condition holds (<code>weight &gt; 10 or distance &gt; 500</code>). If True, <i>n9</i> applies an <b>80</b> surcharge (fee = 180); if False, surcharge is bypassed.<br/>"
+                               "&bull; <b>Express Delivery Surcharge (n10, n11):</b> Decision <i>n10</i> checks express eligibility. If express is requested and the customer is either non-member or sending a package over 5 kg (<code>express and (not member or weight &gt; 5)</code>), <i>n11</i> adds <b>150</b>.<br/>"
+                               "&bull; <b>Loyalty Discount and Final Exit (n12..n14):</b> Decision <i>n12</i> evaluates member discount eligibility (<code>member and fee &gt;= 250</code>). If satisfied, <i>n13</i> applies a 10% integer discount (<code>fee -= fee // 10</code>). Terminal node <i>n14</i> returns the final calculated shipping fee.", body_style))
 
-    # A2
+    # =========================================================================
+    # PAGE 3: Part A2 (NC/EC Table) & Figure A2 (Python AST CFG)
+    # =========================================================================
+    story.append(PageBreak())
     story.append(Paragraph("A2. Minimal Node Coverage (NC) and Edge Coverage (EC) Suites", h2_style))
     story.append(Paragraph("<b>Path Feasibility Analysis:</b> For the longest path <code>n1 -&gt; n3 -&gt; n5 -&gt; n6 -&gt; n7 -&gt; n10 -&gt; n11 -&gt; n12 -&gt; n13 -&gt; n14</code>, input values cannot be chosen freely. D1=False requires weight&gt;0 and distance&gt;0; D2=False requires weight&lt;=50 and distance&lt;=2000; D3=True requires weight&gt;10 and distance&gt;500 (fee becomes 300). D5=True requires express=True and (not member or weight&gt;5). Finally, D6=True demands member=True and fee&gt;=250. Because member=True, D5 requires weight&gt;5 (satisfied by weight&gt;10), and fee becomes 450 &gt;= 250. Thus, inputs are strictly bounded: weight in (10, 50], distance in (500, 2000], express=True, member=True.", body_style))
 
@@ -207,44 +215,91 @@ def build_pdf(filename="CS483_Assignment1_Report.pdf"):
     story.append(Spacer(1, 3))
     story.append(Paragraph("<b>Minimal Suite Sizes:</b> Node Coverage requires <b>4 tests</b>. Edge Coverage requires <b>5 tests</b> (adding EC-5 to traverse the False edge of D4 skipping n9 directly to n10).", body_style))
 
-    # A3
-    story.append(Paragraph("A3. Graph Tool Analysis (py2cfg vs bytecode_cfg.py) & Coverage Verification", h2_style))
-    story.append(Paragraph("<b>Tool Architectural Differences:</b> <code>py2cfg</code> constructs a CFG from the Python AST where compound predicates (e.g. D1) are represented as single decision blocks. In contrast, <code>bytecode_cfg.py</code> operates on compiled Java bytecode where <code>javac</code> decomposes compound short-circuit boolean operators (<code>||</code>, <code>&amp;&amp;</code>) into individual conditional branch bytecodes (<code>ifle</code>, <code>if_icmpgt</code>, etc.), resulting in <b>20 basic blocks</b> (labeled by starting PC offset B0 to B117) and 26 branch directions. Below are the two tool-generated diagrams:", body_style))
-    
+    story.append(Spacer(1, 4))
+    story.append(Paragraph("A3. Graph Tool Analysis (py2cfg vs bytecode_cfg.py)", h2_style))
+    story.append(Paragraph("<b>Tool Architectural Differences:</b> <code>py2cfg</code> parses Python Abstract Syntax Trees (AST). In an AST, high-level boolean expressions (e.g. <code>weight &lt;= 0 or distance &lt;= 0</code>) remain grouped inside single decision nodes. In contrast, <code>bytecode_cfg.py</code> operates on compiled Java bytecode where <code>javac</code> transforms short-circuit boolean operators (<code>||</code>, <code>&amp;&amp;</code>) into individual conditional jump instructions (<code>ifle</code>, <code>if_icmpgt</code>, etc.), yielding <b>20 basic blocks</b> (labeled by PC offset B0 to B117) and 26 branch directions.", body_style))
+
     py_img_path = "D:/SQA/starter_kit/python/shipping_cfg.png"
-    java_img_path = "D:/SQA/starter_kit/java/fee.png"
-    if os.path.exists(py_img_path) and os.path.exists(java_img_path):
-        img_table_data = [
-            [Paragraph("<b>Figure A2: Python AST CFG (py2cfg)</b>", tbl_cell_bold), Paragraph("<b>Figure A3: Java Bytecode CFG (bytecode_cfg.py)</b>", tbl_cell_bold)],
-            [Image(py_img_path, width=2.4*inch, height=2.8*inch), Image(java_img_path, width=2.4*inch, height=2.8*inch)]
-        ]
-        t_img = Table(img_table_data, colWidths=[270, 270])
-        t_img.setStyle(TableStyle([
+    if os.path.exists(py_img_path):
+        story.append(Spacer(1, 3))
+        story.append(Paragraph("Figure A2: Python AST Control Flow Graph (py2cfg)", caption_style))
+        t_py_img = Table([
+            [Image(py_img_path, width=5.4*inch, height=3.4*inch)]
+        ], colWidths=[540])
+        t_py_img.setStyle(TableStyle([
             ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
             ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
-            ('TOPPADDING', (0, 0), (-1, 0), 2),
-            ('BOTTOMPADDING', (0, 0), (-1, 0), 2),
-            ('BOTTOMPADDING', (0, 1), (-1, 1), 2),
+            ('TOPPADDING', (0, 0), (-1, -1), 0),
+            ('BOTTOMPADDING', (0, 0), (-1, -1), 2),
         ]))
-        story.append(KeepTogether(t_img))
+        story.append(t_py_img)
+        story.append(Spacer(1, 2))
+        story.append(Paragraph("<b>Actual Working of Figure A2 (Python AST Model):</b> The py2cfg tool generates nodes directly from the Python abstract syntax grammar. Every decision diamond encapsulates an entire compound condition (e.g. line 14: <code>weight &lt;= 0 or distance &lt;= 0</code>; line 20: <code>weight &gt; 50 or distance &gt; 2000</code>). Rectangular boxes represent sequence blocks. Because python's AST parser maintains high-level expressions intact, short-circuit clauses are evaluated within each diamond without creating intermediate CFG edges. This makes AST graphs highly legible for human inspection of high-level logic, but blind to clause-level decision structure.", body_style))
+
+    # =========================================================================
+    # PAGE 4: Figure A3 (Java Bytecode CFG) & Bytecode Table & A4 Bonus
+    # =========================================================================
+    java_img_path = "D:/SQA/starter_kit/java/fee.png"
+    if os.path.exists(java_img_path):
+        story.append(PageBreak())
+        story.append(Paragraph("Figure A3: Java Bytecode Control Flow Graph (bytecode_cfg.py)", caption_style))
+        
+        bc_table_data = [
+            [Paragraph("Bytecode Block", tbl_header), Paragraph("PC Range", tbl_header), Paragraph("Instruction / Semantic Operation", tbl_header)],
+            [Paragraph("B0", tbl_cell_bold), Paragraph("0 - 2", tbl_cell), Paragraph("<code>iload_0; ifle 14</code> (c1 of D1: weight &lt;= 0)", tbl_cell)],
+            [Paragraph("B3", tbl_cell_bold), Paragraph("3 - 5", tbl_cell), Paragraph("<code>iload_1; ifgt 16</code> (c2 of D1: distance &gt; 0)", tbl_cell)],
+            [Paragraph("B6 (n2)", tbl_cell_bold), Paragraph("6 - 15", tbl_cell), Paragraph("<code>iconst_m1; ireturn</code> (return -1 INVALID)", tbl_cell)],
+            [Paragraph("B16", tbl_cell_bold), Paragraph("16 - 20", tbl_cell), Paragraph("<code>iload_0; bipush 50; if_icmpgt 32</code> (D2 c1)", tbl_cell)],
+            [Paragraph("B21", tbl_cell_bold), Paragraph("21 - 25", tbl_cell), Paragraph("<code>iload_1; sipush 2000; if_icmple 38</code> (D2 c2)", tbl_cell)],
+            [Paragraph("B26 (n4)", tbl_cell_bold), Paragraph("26 - 37", tbl_cell), Paragraph("<code>bipush -2; ireturn</code> (return -2 REFUSED)", tbl_cell)],
+            [Paragraph("B38 (n5)", tbl_cell_bold), Paragraph("38 - 42", tbl_cell), Paragraph("<code>bipush 100; istore 4</code> (fee = 100)", tbl_cell)],
+            [Paragraph("B43", tbl_cell_bold), Paragraph("43 - 46", tbl_cell), Paragraph("<code>iload_0; bipush 10; if_icmple 54</code> (D3 c1)", tbl_cell)],
+            [Paragraph("B47", tbl_cell_bold), Paragraph("47 - 51", tbl_cell), Paragraph("<code>iload_1; sipush 500; if_icmple 54</code> (D3 c2)", tbl_cell)],
+            [Paragraph("B52 (n7)", tbl_cell_bold), Paragraph("52 - 53", tbl_cell), Paragraph("<code>iinc 4, 200; goto 73</code> (fee += 200)", tbl_cell)],
+            [Paragraph("B54", tbl_cell_bold), Paragraph("54 - 58", tbl_cell), Paragraph("<code>iload_0; bipush 10; if_icmpgt 68</code> (D4 c1)", tbl_cell)],
+            [Paragraph("B59", tbl_cell_bold), Paragraph("59 - 63", tbl_cell), Paragraph("<code>iload_1; sipush 500; if_icmple 73</code> (D4 c2)", tbl_cell)],
+            [Paragraph("B68 (n9)", tbl_cell_bold), Paragraph("68 - 72", tbl_cell), Paragraph("<code>iinc 4, 80</code> (fee += 80)", tbl_cell)],
+            [Paragraph("B73", tbl_cell_bold), Paragraph("73 - 75", tbl_cell), Paragraph("<code>iload_2; ifeq 95</code> (D5 c1: express == false)", tbl_cell)],
+            [Paragraph("B76", tbl_cell_bold), Paragraph("76 - 78", tbl_cell), Paragraph("<code>iload_3; ifeq 88</code> (D5 c2: !member)", tbl_cell)],
+            [Paragraph("B79", tbl_cell_bold), Paragraph("79 - 83", tbl_cell), Paragraph("<code>iload_0; iconst_5; if_icmple 95</code> (D5 c3)", tbl_cell)],
+            [Paragraph("B88 (n11)", tbl_cell_bold), Paragraph("88 - 94", tbl_cell), Paragraph("<code>iinc 4, 150</code> (fee += 150)", tbl_cell)],
+            [Paragraph("B95", tbl_cell_bold), Paragraph("95 - 97", tbl_cell), Paragraph("<code>iload_3; ifeq 117</code> (D6 c1: member == false)", tbl_cell)],
+            [Paragraph("B98", tbl_cell_bold), Paragraph("98 - 102", tbl_cell), Paragraph("<code>iload 4; sipush 250; if_icmplt 117</code> (D6 c2)", tbl_cell)],
+            [Paragraph("B103 (n13)", tbl_cell_bold), Paragraph("103 - 116", tbl_cell), Paragraph("<code>fee -= fee / 10</code> (10% integer discount)", tbl_cell)],
+            [Paragraph("B117 (n14)", tbl_cell_bold), Paragraph("117 - 118", tbl_cell), Paragraph("<code>iload 4; ireturn</code> (return final fee)", tbl_cell)],
+        ]
+        t_bc_table = Table(bc_table_data, colWidths=[65, 55, 175])
+        t_bc_table.setStyle(TableStyle([
+            ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor('#2b6cb0')),
+            ('GRID', (0, 0), (-1, -1), 0.5, colors.HexColor('#cbd5e0')),
+            ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+            ('TOPPADDING', (0, 0), (-1, -1), 1.2),
+            ('BOTTOMPADDING', (0, 0), (-1, -1), 1.2),
+        ]))
+
+        t_java_side = Table([
+            [Image(java_img_path, width=2.0*inch, height=5.5*inch), t_bc_table]
+        ], colWidths=[230, 310])
+        t_java_side.setStyle(TableStyle([
+            ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
+            ('VALIGN', (0, 0), (-1, -1), 'TOP'),
+            ('TOPPADDING', (0, 0), (-1, -1), 0),
+            ('BOTTOMPADDING', (0, 0), (-1, -1), 0),
+        ]))
+        story.append(t_java_side)
+        story.append(Spacer(1, 3))
+        story.append(Paragraph("<b>Actual Working of Figure A3 (Java Bytecode Model):</b> As shown above, <code>javac</code> compiles every logical operator (<code>||</code>, <code>&amp;&amp;</code>) into an individual conditional jump bytecode. For instance, predicate D1 (<code>weight &lt;= 0 || distance &lt;= 0</code>) is split across B0 (<code>ifle</code> jump) and B3 (<code>ifgt</code> jump). If B0 evaluates True, it short-circuits directly to B6 without evaluating B3. Thus, the bytecode CFG contains <b>20 basic blocks and 26 branch directions</b>, completely exposing intra-predicate clause control flows.", body_style))
+
     story.append(Spacer(1, 3))
+    story.append(Paragraph("<b>Empirical Coverage Measurements:</b> &bull; <b>Python coverage.py (--branch):</b> NC Suite achieved <b>100% Statement Coverage</b> (17/17 stmts) and <b>97% Branch Coverage</b> (11/12 branches; missed edge <code>34-&gt;36</code> because D4 False was untaken). EC Suite achieved <b>100% Statement and 100% Branch Coverage</b> (12/12 branches). &bull; <b>Java JaCoCo:</b> NC achieved 100% Line Coverage (14/14 lines) and 17/26 bytecode branches (9 missed). EC achieved 100% Line Coverage and 20/26 bytecode branches (6 missed due to short-circuit clause skipping).", body_style))
 
-    story.append(Paragraph("<b>Empirical Coverage Measurements:</b>", body_style))
-    story.append(Paragraph("&bull; <b>Python coverage.py (--branch):</b> NC Suite achieved <b>100% Statement Coverage</b> (17/17 stmts) and <b>97% Branch Coverage</b> (11/12 branches; missed edge <code>34-&gt;36</code> because D4 False was untaken). EC Suite achieved <b>100% Statement and 100% Branch Coverage</b> (12/12 branches).", bullet_style))
-    story.append(Paragraph("&bull; <b>Java JaCoCo:</b> NC achieved 100% Line Coverage (14/14 lines) and 17/26 bytecode branches (9 missed). EC achieved 100% Line Coverage and 20/26 bytecode branches (6 missed due to short-circuit clause skipping).", bullet_style))
-
-    # A4 Bonus (Labeled as Unclaimed Bonus)
-    story.append(Paragraph("A4 (Optional Bonus) - Theoretical Complete-Path Enumeration & Analysis (Unclaimed for Grading)", h2_style))
-    story.append(Paragraph("<b>Path Counting:</b> Syntactically, the CFG has 1 path to n2, 1 path to n4, and 3 surcharge options &times; 2 express options &times; 2 discount options = 12 main-body paths, totaling <b>14 complete paths</b>. Exactly <b>2 paths are infeasible</b>:", body_style))
-    story.append(Paragraph("&bull; <i>Infeasible Path 1 [S2, T2, U1]:</i> fee = 100 + 80 = 180. D6 requires fee &gt;= 250, so taking the discount branch to n13 is impossible.", bullet_style))
-    story.append(Paragraph("&bull; <i>Infeasible Path 2 [S3, T2, U1]:</i> fee = 100. Since 100 &lt; 250, D6 False is unavoidable; taking the discount branch to n13 is impossible.", bullet_style))
-    story.append(Paragraph("<b>Status on Bonus Submission:</b> Because the official starter-kit automated matrix runners (<code>run_matrix.py</code> and <code>RunMatrix.java</code>) evaluate the seven assigned criteria (<code>nc, ec, pc, cc, cacc, racc, extra</code>), A4 complete-path testing is retained strictly as theoretical analysis and is formally <b>UNCLAIMED for bonus marks</b> to preserve 100% integrity with starter-kit deliverables.", body_style))
-
-    story.append(Spacer(1, 5))
+    story.append(Spacer(1, 3))
+    story.append(Paragraph("<b>A4 (Optional Bonus) - Theoretical Complete-Path Enumeration &amp; Analysis (Unclaimed for Grading):</b> Syntactically, the CFG has 1 path to n2, 1 path to n4, and 3 surcharge options &times; 2 express options &times; 2 discount options = 12 main-body paths, totaling <b>14 complete paths</b>. Exactly <b>2 paths are infeasible</b>: [S2, T2, U1] (fee=180 &lt; 250) and [S3, T2, U1] (fee=100 &lt; 250). Because the official starter-kit automated matrix runners (<code>run_matrix.py</code> and <code>RunMatrix.java</code>) evaluate the seven assigned criteria, A4 complete-path testing is retained strictly as theoretical analysis and is formally <b>UNCLAIMED for bonus marks</b>.", body_style))
 
     # =========================================================================
-    # Part B: Logic Coverage
+    # PAGE 5: Part B1 (Logic Requirements) & B2 (Infeasibility Analysis)
     # =========================================================================
+    story.append(PageBreak())
     story.append(Paragraph("Part B: Logic Coverage (5 Marks)", h1_style))
     story.append(Paragraph("B1. Logic Requirements and Active Clause Pairs for D1-D6", h2_style))
     story.append(Paragraph("Truth tables were derived and verified against <code>tools/predcheck.py gen</code>. For every 2-clause predicate (D1, D2, D3, D4, D6), the smallest RACC and CACC sets both require <b>3 rows</b> ($N+1$). For 3-clause predicate D5, both require <b>4 rows</b> ($N+1$). There is <b>no predicate</b> where the smallest CACC set is smaller than the smallest RACC set.", body_style))
@@ -276,13 +331,16 @@ def build_pdf(filename="CS483_Assignment1_Report.pdf"):
                            "- <b>For c2 (member):</b> CACC = RACC = (TFF, TTF) (Row 4 vs Row 2).<br/>"
                            "- <b>For c3 (weight&gt;5):</b> CACC = RACC = (TTT, TTF) (Row 1 vs Row 2).", body_style))
 
-    # B2
+    story.append(Spacer(1, 3))
     story.append(Paragraph("B2. Infeasibility and Variable Coupling Analysis", h2_style))
     story.append(Paragraph("&bull; <b>D4 Row TT Infeasibility &amp; Minimal CC Set:</b> D4 is reached only if D3 is False (not(weight&gt;10 and distance&gt;500)). If weight&gt;10 and distance&gt;500, D3 evaluates to True and branches directly to D5. Hence, abstract row TT cannot occur at D4. Since row TT is infeasible at D4, a minimal feasible CC set is <b>{TF, FT}</b>. These two rows exercise both truth values of each clause (weight&gt;10 is True in TF, False in FT; distance&gt;500 is False in TF, True in FT). Row FF may be added to exercise the predicate's False outcome, but it is not required for CC alone. RACC requirements ({TF, FT, FF}) do not require TT and remain 100% feasible.", bullet_style))
     story.append(Paragraph("&bull; <b>D6 Derived Fee Infeasibility:</b> Fee depends on earlier branches. Row TF (member=True, fee&lt;250) requires fee&lt;250, strictly constraining prior execution: D3 must be False and express delivery must not be applied.", bullet_style))
     story.append(Paragraph("&bull; <b>Coupling between weight&gt;5 (D5) and weight&gt;10 (D3/D4):</b> Since weight&gt;10 implies weight&gt;5, any test executing D3 True guarantees weight&gt;5. To test clause c3 actively under RACC (requiring row TTF), the test MUST have weight&lt;=5, bypassing all weight surcharges.", bullet_style))
 
-    # B3
+    # =========================================================================
+    # PAGE 6: Part B3 (Executable Suites PC, CC, RACC) & B4 (Tool Verification)
+    # =========================================================================
+    story.append(PageBreak())
     story.append(Paragraph("B3. Executable Test Suites (PC, CC, CACC, RACC Documentation)", h2_style))
     story.append(Paragraph("Four minimal suites were implemented and verified on both Python and Java. Below are the complete specifications for PC and CC:", body_style))
     
@@ -299,8 +357,8 @@ def build_pdf(filename="CS483_Assignment1_Report.pdf"):
         ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor('#2b6cb0')),
         ('GRID', (0, 0), (-1, -1), 0.5, colors.HexColor('#cbd5e0')),
         ('VALIGN', (0, 0), (-1, -1), 'TOP'),
-        ('TOPPADDING', (0, 0), (-1, -1), 1.8),
-        ('BOTTOMPADDING', (0, 0), (-1, -1), 1.8),
+        ('TOPPADDING', (0, 0), (-1, -1), 1.5),
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 1.5),
     ]))
     story.append(t_pc)
     story.append(Spacer(1, 3))
@@ -318,13 +376,13 @@ def build_pdf(filename="CS483_Assignment1_Report.pdf"):
         ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor('#2b6cb0')),
         ('GRID', (0, 0), (-1, -1), 0.5, colors.HexColor('#cbd5e0')),
         ('VALIGN', (0, 0), (-1, -1), 'TOP'),
-        ('TOPPADDING', (0, 0), (-1, -1), 1.8),
-        ('BOTTOMPADDING', (0, 0), (-1, -1), 1.8),
+        ('TOPPADDING', (0, 0), (-1, -1), 1.5),
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 1.5),
     ]))
     story.append(t_cc)
     story.append(Spacer(1, 3))
 
-    story.append(Paragraph("<b>Shared 8-Test Suite for CACC and RACC:</b> Because the minimal CACC row requirements for D1-D6 are fully subsumed within the RACC requirement sets, a single shared set of <b>8 test inputs</b> satisfies both CACC and RACC completely (100%). In the starter kit, they are implemented as separate classes: Python <code>test_cacc.py</code> and <code>test_racc.py</code> (implemented by Haider Ali Khan); Java <code>CorrelatedActiveClauseCoverageTest.java</code> and <code>RestrictedActiveClauseCoverageTest.java</code> (implemented by Muhammad Rayyan Bhatti).", body_style))
+    story.append(Paragraph("<b>Shared 8-Test Suite for CACC and RACC:</b> A single shared set of <b>8 test inputs</b> satisfies both CACC and RACC completely (100%). Implemented separately: Python <code>test_cacc.py</code> and <code>test_racc.py</code> (Haider Ali Khan); Java <code>CorrelatedActiveClauseCoverageTest.java</code> and <code>RestrictedActiveClauseCoverageTest.java</code> (Muhammad Rayyan Bhatti).", body_style))
 
     racc_tbl_data = [
         [Paragraph("Test ID", tbl_header), Paragraph("Inputs (w, d, exp, mem)", tbl_header), Paragraph("D1..D6 Rows Traversed", tbl_header), Paragraph("Hand Calc. Expected", tbl_header), Paragraph("Active Clause Requirements Satisfied", tbl_header)],
@@ -342,23 +400,21 @@ def build_pdf(filename="CS483_Assignment1_Report.pdf"):
         ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor('#2b6cb0')),
         ('GRID', (0, 0), (-1, -1), 0.5, colors.HexColor('#cbd5e0')),
         ('VALIGN', (0, 0), (-1, -1), 'TOP'),
-        ('TOPPADDING', (0, 0), (-1, -1), 1.8),
-        ('BOTTOMPADDING', (0, 0), (-1, -1), 1.8),
+        ('TOPPADDING', (0, 0), (-1, -1), 1.5),
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 1.5),
     ]))
     story.append(t_racc)
     story.append(Spacer(1, 3))
 
-    # B4
     story.append(Paragraph("B4. Tool Verification (predcheck.py, pymcdc, JaCoCo)", h2_style))
     story.append(Paragraph("&bull; <b>predcheck.py check:</b> All six CSV files (<code>d1.csv</code> to <code>d6.csv</code>) were verified with <code>predcheck.py check</code>. All passed 100% across PC, CC, GACC, CACC, and RACC criteria.", bullet_style))
     story.append(Paragraph("&bull; <b>pymcdc:</b> Executed via <code>python -m pymcdc --unittest tests/test_racc.py shipping_ref.py</code>. Reported <b>19 out of 19 requirements covered (100%)</b> across all 6 decision predicates. Pymcdc masks unreached short-circuit clauses as don't-care (<code>----</code>), verifying exact dynamic active clause satisfaction.", bullet_style))
     story.append(Paragraph("&bull; <b>JaCoCo on RACC:</b> Executed via Java agent and CLI. Reported <b>26/26 bytecode branches covered (100%)</b> and 61/61 instructions covered (100%). RACC's active clause toggling forced every compiled bytecode conditional jump target to be executed.", bullet_style))
 
-    story.append(Spacer(1, 5))
-
     # =========================================================================
-    # Part C: Fault Detection
+    # PAGE 7: Part C1 (Fault Detection Matrix) & C2 (Classification)
     # =========================================================================
+    story.append(PageBreak())
     story.append(Paragraph("Part C: Fault-Detection Experiments (5 Marks)", h1_style))
     story.append(Paragraph("C1. Python and Java Fault-Detection Matrices", h2_style))
     story.append(Paragraph("Both test suites were executed against the reference and ten faulty programs using <code>run_matrix.py</code> and <code>shipping.RunMatrix</code>. The two independent runners agreed 100% on every cell:", body_style))
@@ -384,13 +440,12 @@ def build_pdf(filename="CS483_Assignment1_Report.pdf"):
         ('GRID', (0, 0), (-1, -1), 0.5, colors.HexColor('#cbd5e0')),
         ('ALIGN', (1, 0), (-1, -1), 'CENTER'),
         ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
-        ('TOPPADDING', (0, 0), (-1, -1), 1.5),
-        ('BOTTOMPADDING', (0, 0), (-1, -1), 1.5),
+        ('TOPPADDING', (0, 0), (-1, -1), 1.8),
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 1.8),
     ]))
     story.append(t_c1)
     story.append(Spacer(1, 3))
 
-    # C2
     story.append(Paragraph("C2. Seeded Fault Classification and Detection Rationale", h2_style))
     story.append(Paragraph("&bull; <b>f01 (Logical Operator: <code>|| -&gt; &amp;&amp;</code> in D1):</b> Requires opposite clause truth values (TF or FT). Killed by NC, EC, PC, CACC, RACC via (0, 100). Missed by CC because CC satisfied D1 with rows TT and FF where clauses never differed.", bullet_style))
     story.append(Paragraph("&bull; <b>f02 (Clause Omitted: <code>or distance &gt; 2000</code> in D2):</b> Requires weight&lt;=50 and distance&gt;2000 (row FT). Missed by NC, EC, PC, CC which satisfied D2 True via weight&gt;50. Killed only by CACC and RACC via (10, 2500).", bullet_style))
@@ -403,11 +458,14 @@ def build_pdf(filename="CS483_Assignment1_Report.pdf"):
     story.append(Paragraph("&bull; <b>f09 (Constant: <code>150 -&gt; 105</code> in D5):</b> Transposes digits in express surcharge. Killed by all suites because all suites execute express delivery.", bullet_style))
     story.append(Paragraph("&bull; <b>f10 (Relational Operator / Constant: <code>weight &gt; 50 -&gt; weight &gt;= 51</code> in D2):</b> Over integer domain, weight&gt;50 and weight&gt;=51 are logically identical. Equivalent mutant; cannot be killed by any valid test input.", bullet_style))
 
-    # C3
+    # =========================================================================
+    # PAGE 8: Part C3, C4 & Part D1 (Tool Assessment Table)
+    # =========================================================================
+    story.append(PageBreak())
     story.append(Paragraph("C3. Luck Analysis (f01 under Node Coverage)", h2_style))
     story.append(Paragraph("Node Coverage requires visiting n2 (D1 True). Our NC suite selected <b>(0, 100, False, False)</b> (row TF), which happened to kill f01. However, an equally minimal and 100% adequate NC suite (<code>NC-alt</code>) can select <b>(0, 0, False, False)</b> (row TT) for Test 1. When executed against f01, <code>0&lt;=0 and 0&lt;=0</code> evaluates to True, returning -1. Thus, <code>NC-alt</code> passes completely on f01 and <b>misses the fault entirely</b>. This proves that structural coverage guarantees only syntactic code execution, not semantic fault detection; killing f01 under NC was pure luck.", body_style))
 
-    # C4
+    story.append(Spacer(1, 3))
     story.append(Paragraph("C4. Surviving Faults and Extra Tests", h2_style))
     story.append(Paragraph("Three faults survived all six criteria: f03, f08, and f10. Exactly <b>2 targeted boundary tests</b> in <code>test_extra.py</code> / <code>ExtraTest.java</code> kill all killable survivors:", body_style))
     story.append(Paragraph("<b>Proof that Two Tests are Minimal:</b> One test cannot simultaneously expose f03 and f08. Detecting f03 requires <code>weight &gt; 10</code> and <code>distance == 500</code>. Detecting f08 requires a member parcel with a pre-discount fee of exactly 250, which requires weight between 5 and 10 without a heavy or long surcharge (<code>weight &lt;= 10</code>). These weight constraints are mutually incompatible (<code>weight &gt; 10</code> vs <code>weight &lt;= 10</code>). Therefore, at least two additional tests are mathematically necessary.", body_style))
@@ -415,11 +473,7 @@ def build_pdf(filename="CS483_Assignment1_Report.pdf"):
     story.append(Paragraph("&bull; <b>test_extra_02 (8, 200, True, True) -&gt; Expected 225 (kills f08):</b> Motivated by <b>Internal State Boundary Analysis</b> on fee&gt;=250. Pre-discount fee is exactly 250. Ref applies 10% discount (fee=225); f08 skips discount (fee=250).", bullet_style))
     story.append(Paragraph("&bull; <b>f10 is Provably Equivalent:</b> In integer arithmetic, for any integer weight w, (w &gt; 50) &lt;=&gt; (w &gt;= 51). Because both conditions evaluate identically across all possible integer inputs, f10 produces identical outputs to the reference implementation across the entire input domain. It is an equivalent mutant and cannot be killed.", bullet_style))
 
-    story.append(Spacer(1, 5))
-
-    # =========================================================================
-    # Part D: Tools & Mutation Testing
-    # =========================================================================
+    story.append(Spacer(1, 4))
     story.append(Paragraph("Part D: Tools and Mutation Testing (3 Marks)", h1_style))
     story.append(Paragraph("D1. Tool Assessment Evaluation", h2_style))
     
@@ -444,14 +498,17 @@ def build_pdf(filename="CS483_Assignment1_Report.pdf"):
         ('GRID', (0, 0), (-1, -1), 0.5, colors.HexColor('#cbd5e0')),
         ('ALIGN', (2, 0), (-1, -1), 'CENTER'),
         ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
-        ('TOPPADDING', (0, 0), (-1, -1), 1.5),
-        ('BOTTOMPADDING', (0, 0), (-1, -1), 1.5),
+        ('TOPPADDING', (0, 0), (-1, -1), 1.6),
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 1.6),
     ]))
     story.append(t_d1)
     story.append(Spacer(1, 3))
     story.append(Paragraph("<b>Clarifications on Q9 &amp; JaCoCo:</b> Mutmut scored No on Q9 because it reports surviving mutants (syntactic mutants not killed) rather than uncovered structural or logic test requirements. JaCoCo's branch coverage measures bytecode conditional jumps (where each clause becomes a jump instruction); it does not compute active clause independence or report MC/DC pairs.", body_style))
 
-    # D2
+    # =========================================================================
+    # PAGE 9: Part D2 (Mutation Testing) & Part E (Questions 1, 2, 3)
+    # =========================================================================
+    story.append(PageBreak())
     story.append(Paragraph("D2. Mutation Testing Experiments (mutmut 2.5.1)", h2_style))
     story.append(Paragraph("Mutation testing was performed on <code>shipping_ref.py</code> using <code>mutmut 2.5.1</code> with pytest in two distinct experiments:", body_style))
     story.append(Paragraph("&bull; <b>Experiment 1 (Node Coverage Suite):</b> 49 mutants generated, 27 killed, 22 survived. <b>Mutation Score: 55.10%</b>.", bullet_style))
@@ -462,18 +519,21 @@ def build_pdf(filename="CS483_Assignment1_Report.pdf"):
     story.append(Paragraph("&bull; <i>Mutant 8 (D1: weight &lt;= 0 -&gt; weight &lt;= 1):</i> Survived because RACC used valid weights &gt;= 4. A test with weight=1 is required to distinguish weight&lt;=0 from weight&lt;=1.", bullet_style))
     story.append(Paragraph("<b>Comparison: Mutmut Generated Mutants vs. Seeded Faults f01-f10:</b> Mutmut automatically generated f03 (Mutant 21), f08 (Mutant 44), and f05 (Mutant 35). Crucially, <b>Mutant 13 (weight &gt; 51) is NOT equivalent to the reference</b>: an input with weight=51 distinguishes them (ref returns REFUSED, Mutant 13 proceeds to fee calculation). In contrast, <b>instructor fault f10 (weight &gt;= 51) is completely equivalent</b> to weight &gt; 50 for integer inputs.", body_style))
 
-    story.append(Spacer(1, 5))
-
-    # =========================================================================
-    # Part E: Critical Reflection
-    # =========================================================================
+    story.append(Spacer(1, 4))
     story.append(Paragraph("Part E: Critical Reflection (2 Marks)", h1_style))
     story.append(Paragraph("<b>1. Do PC and EC require the same number of tests for this program? Is this coincidence or a general property?</b><br/>"
                            "In our experiments, both PC and EC required exactly <b>5 tests</b>. This numerical equality is a <b>coincidence of this specific program structure</b>, not a general theoretical property. Edge Coverage is a structural control-flow criterion requiring every CFG edge to be traversed ($TR_{EC} = E$). Predicate Coverage is a logic criterion requiring every decision predicate to evaluate to both True and False at least once ($TR_{PC} = {P=True, P=False}$). In <code>ShippingFee</code>, each decision D1..D6 corresponds directly to an `if` branching point in the control-flow graph. Because the CFG contains 14 nodes and 17 edges with sequential branch points on the main path, 5 test paths happen to simultaneously satisfy all 12 edge branches and all 12 truth assignments. In general programs, minimal PC and EC suite sizes are not guaranteed to be equal: in programs containing loops (`while`, `for`) or complex multi-way transfer structures, EC frequently requires significantly more test paths than PC. Conversely, in programs with decoupled sequential `if` statements, PC can often be satisfied with fewer tests than EC.", body_style))
+    story.append(Spacer(1, 3))
     story.append(Paragraph("<b>2. What does 100% branch coverage with relatively few faults detected tell us about test quality?</b><br/>"
                            "Our EC suite achieved 100% branch coverage (12/12 branches in coverage.py) but killed only <b>3 out of 10 seeded faults (30%)</b>, while the NC suite left 22 mutmut mutants surviving. This demonstrates that <b>branch coverage is merely a coarse structural baseline, not a guarantee of test quality or defect detection</b>. Branch coverage ensures only that each branch direction is taken once; it is blind to independent clause masking within compound boolean decisions (missing f02, f04, f05, f07) and blind to relational boundary shifts (missing f03, f08). High branch coverage provides false confidence if test inputs are selected arbitrarily without boundary rigor.", body_style))
+    story.append(Spacer(1, 3))
     story.append(Paragraph("<b>3. Which coverage criterion detected the most faults per test?</b><br/>"
                            "Faults detected per test across standard criteria: <b>NC:</b> 3/4 = 0.750; <b>EC:</b> 3/5 = 0.600; <b>PC:</b> 3/5 = 0.600; <b>CC:</b> 3/5 = 0.600; <b>CACC:</b> 7/8 = <b>0.875</b>; <b>RACC:</b> 7/8 = <b>0.875</b>. Among the standard criteria, <b>CACC and RACC detected the most faults per test (0.875)</b>, killing 7/10 faults with 8 tests. For the Extra Suite (2 tests), its <b>raw detection rate</b> was 4/2 = <b>2.000 faults/test</b> (killing f03, f06, f08, f09), while its <b>incremental detection rate</b> was 2/2 = <b>1.000 fault/test</b> (killing the 2 previously surviving faults f03 and f08).", body_style))
+
+    # =========================================================================
+    # PAGE 10: Part E (Questions 4, 5) & Group Contribution Statement
+    # =========================================================================
+    story.append(PageBreak())
     story.append(Paragraph("<b>4. One limitation of every tool actually used:</b><br/>"
                            "&bull; <code>py2cfg</code>: Treats compound boolean expressions as monolithic AST nodes, obscuring short-circuit decision logic.<br/>"
                            "&bull; <code>bytecode_cfg.py</code>: Tied to compiled bytecode instructions; cannot directly trace source variable names or expressions.<br/>"
@@ -482,20 +542,17 @@ def build_pdf(filename="CS483_Assignment1_Report.pdf"):
                            "&bull; <code>pymcdc</code>: Evaluates isolated single-function AST snippets; does not trace cross-predicate state mutations or CFG path flows.<br/>"
                            "&bull; <code>predcheck.py</code>: Evaluates static truth tables from offline CSV inputs without awareness of executable program path constraints.<br/>"
                            "&bull; <code>mutmut</code>: Limited to syntactic token replacements; does not identify equivalent mutants and reports surviving mutants rather than uncovered source requirements.", body_style))
+    story.append(Spacer(1, 3))
     story.append(Paragraph("<b>5. How to systematically discover faults that no criterion found:</b><br/>"
                            "Faults f03 and f08 survived all six criteria because structural and logic coverage criteria only mandate <i>which paths or clauses to evaluate</i>, not <i>which concrete boundary values to choose</i>. To systematically catch such faults without relying on luck:<br/>"
-                           "1. <b>Boundary Value Analysis (BVA):</b> Automatically generate on-boundary ($x$), off-boundary ($x-1, x+1$), and interior values for every relational comparison ($distance in {499, 500, 501}$).<br/>"
-                           "2. <b>Domain Testing on Derived State:</b> Identify internal state variables (such as <code>fee</code>) and construct test paths targeting partition boundaries of derived thresholds ($fee in {249, 250, 251}$).<br/>"
+                           "1. <b>Boundary Value Analysis (BVA):</b> Automatically generate on-boundary ($x$), off-boundary ($x-1, x+1$), and interior values for every relational comparison ($distance \\in \\{499, 500, 501\\}$).<br/>"
+                           "2. <b>Domain Testing on Derived State:</b> Identify internal state variables (such as <code>fee</code>) and construct test paths targeting partition boundaries of derived thresholds ($fee \\in \\{249, 250, 251\\}$).<br/>"
                            "3. <b>Equivalence Proving via SMT Solvers:</b> Use automated constraint solvers (e.g. Z3) to mathematically prove mutant equivalence (such as f10), preventing futile manual search for impossible test cases.", body_style))
 
     story.append(Spacer(1, 5))
-
-    # =========================================================================
-    # Group Contribution Statement
-    # =========================================================================
     story.append(Paragraph("Group Contribution Statement", h1_style))
     story.append(Paragraph("This assignment was completed collaboratively by a two-member team in accordance with the course specifications:", body_style))
-    story.append(Spacer(1, 2))
+    story.append(Spacer(1, 3))
     
     contrib_data = [
         [Paragraph("Team Member", tbl_header), Paragraph("Role &amp; Primary Language", tbl_header), Paragraph("Individual Technical Contributions", tbl_header), Paragraph("Share", tbl_header)],
@@ -524,8 +581,8 @@ def build_pdf(filename="CS483_Assignment1_Report.pdf"):
         ('GRID', (0, 0), (-1, -1), 0.5, colors.HexColor('#cbd5e0')),
         ('VALIGN', (0, 0), (-1, -1), 'TOP'),
         ('ALIGN', (3, 0), (3, -1), 'CENTER'),
-        ('TOPPADDING', (0, 0), (-1, -1), 2),
-        ('BOTTOMPADDING', (0, 0), (-1, -1), 2),
+        ('TOPPADDING', (0, 0), (-1, -1), 2.2),
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 2.2),
     ]))
     story.append(t_contrib)
 
