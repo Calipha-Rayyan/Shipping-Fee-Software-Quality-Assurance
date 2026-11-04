@@ -1,6 +1,9 @@
 """Script to generate the final CS 483 Assignment 1 PDF report using ReportLab.
 Conforms strictly to the 12-page limit and covers all tasks A1-E.
-Uses Times-Roman font as requested, with explicit editable student placeholders.
+Uses Times-Roman font, includes both team members, and incorporates all three diagrams:
+1. Figure A1: Hand-derived CFG (A1 - Non-code drawing model)
+2. Figure A2: Python AST CFG (A3 - py2cfg tool-generated)
+3. Figure A3: Java Bytecode CFG (A3 - bytecode_cfg.py tool-generated)
 """
 import os
 import sys
@@ -117,10 +120,10 @@ def build_pdf(filename="CS483_Assignment1_Report.pdf"):
 
     story = []
 
-    # Title Banner with Editable Student Fields
+    # Title Banner with Both Team Members
     story.append(Paragraph("CS 483: Software Quality Assurance - Assignment 1", title_style))
     story.append(Paragraph("From Coverage Criteria to Working Tools: Testing the ShippingFee Program", subtitle_style))
-    story.append(Paragraph("<b>Student Name:</b> Muhammad Rayyan Bhatti &nbsp;&nbsp;|&nbsp;&nbsp; <b>Student ID:</b> 04072312024 &nbsp;&nbsp;|&nbsp;&nbsp; <b>Submission Mode:</b> Individual Submission (Single Member)", meta_style))
+    story.append(Paragraph("<b>Team Members:</b> Muhammad Rayyan Bhatti (ID: 04072312024 - Java/JUnit Lead) &nbsp;|&nbsp; Haider Ali Khan (Python/PyUnit Lead)<br/><b>Course:</b> CS 483 Software Quality Assurance &nbsp;|&nbsp; <b>Due Date:</b> November 5, 2026", meta_style))
     story.append(HRFlowable(width="100%", thickness=1, color=colors.HexColor('#cbd5e0'), spaceAfter=6))
 
     # =========================================================================
@@ -130,7 +133,7 @@ def build_pdf(filename="CS483_Assignment1_Report.pdf"):
     
     # A1
     story.append(Paragraph("A1. Control Flow Graph Construction and Node/Edge Identification", h2_style))
-    story.append(Paragraph("The control flow graph for Algorithm 1 (<code>ShippingFee</code>) was modeled using canonical nodes <i>n1</i> to <i>n14</i>, with decision nodes at every predicate and action nodes for assignments and exits.", body_style))
+    story.append(Paragraph("The control flow graph for Algorithm 1 (<code>ShippingFee</code>) was modeled using canonical nodes <i>n1</i> to <i>n14</i>, with decision nodes at every predicate and action nodes for assignments and exits. Below is the complete structural identification table alongside the hand-derived control flow graph:", body_style))
     
     a1_data = [
         [Paragraph("Node", tbl_header), Paragraph("Type", tbl_header), Paragraph("Code Segment / Operation", tbl_header), Paragraph("Outgoing Transitions", tbl_header)],
@@ -160,6 +163,24 @@ def build_pdf(filename="CS483_Assignment1_Report.pdf"):
     story.append(t_a1)
     story.append(Spacer(1, 3))
     story.append(Paragraph("<b>CFG Edge List:</b> <i>E</i> = {(n1, n2), (n1, n3), (n3, n4), (n3, n5), (n5, n6), (n6, n7), (n6, n8), (n7, n10), (n8, n9), (n8, n10), (n9, n10), (n10, n11), (n10, n12), (n11, n12), (n12, n13), (n12, n14), (n13, n14)}. <b>Total Nodes: |N| = 14, Total Edges: |E| = 17.</b>", body_style))
+    story.append(Spacer(1, 3))
+
+    # Hand-derived Diagram 1 (Non-code drawing)
+    hand_img_path = "D:/SQA/starter_kit/cfg_hand_derived.png"
+    if os.path.exists(hand_img_path):
+        t_hand = Table([
+            [Paragraph("<b>Figure A1: Hand-Derived Specification Control Flow Graph (A1 - Flowchart Model)</b>", tbl_cell_bold)],
+            [Image(hand_img_path, width=3.6*inch, height=4.2*inch)]
+        ], colWidths=[540])
+        t_hand.setStyle(TableStyle([
+            ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+            ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+            ('TOPPADDING', (0, 0), (-1, 0), 2),
+            ('BOTTOMPADDING', (0, 0), (-1, 0), 2),
+            ('BOTTOMPADDING', (0, 1), (-1, 1), 2),
+        ]))
+        story.append(KeepTogether(t_hand))
+        story.append(Spacer(1, 4))
 
     # A2
     story.append(Paragraph("A2. Minimal Node Coverage (NC) and Edge Coverage (EC) Suites", h2_style))
@@ -188,13 +209,13 @@ def build_pdf(filename="CS483_Assignment1_Report.pdf"):
 
     # A3
     story.append(Paragraph("A3. Graph Tool Analysis (py2cfg vs bytecode_cfg.py) & Coverage Verification", h2_style))
-    story.append(Paragraph("<b>Tool Architectural Differences:</b> <code>py2cfg</code> constructs a CFG from the Python AST where compound predicates (e.g. D1) are represented as single decision blocks. In contrast, <code>bytecode_cfg.py</code> operates on compiled Java bytecode where <code>javac</code> decomposes compound short-circuit boolean operators (<code>||</code>, <code>&amp;&amp;</code>) into individual conditional branch bytecodes (<code>ifle</code>, <code>if_icmpgt</code>, etc.), resulting in <b>20 basic blocks</b> (labeled by starting PC offset B0 to B117) and 26 branch directions. Consequently, bytecode branch coverage measures clause-level branch outcomes rather than source statement branch coverage.", body_style))
+    story.append(Paragraph("<b>Tool Architectural Differences:</b> <code>py2cfg</code> constructs a CFG from the Python AST where compound predicates (e.g. D1) are represented as single decision blocks. In contrast, <code>bytecode_cfg.py</code> operates on compiled Java bytecode where <code>javac</code> decomposes compound short-circuit boolean operators (<code>||</code>, <code>&amp;&amp;</code>) into individual conditional branch bytecodes (<code>ifle</code>, <code>if_icmpgt</code>, etc.), resulting in <b>20 basic blocks</b> (labeled by starting PC offset B0 to B117) and 26 branch directions. Below are the two tool-generated diagrams:", body_style))
     
     py_img_path = "D:/SQA/starter_kit/python/shipping_cfg.png"
     java_img_path = "D:/SQA/starter_kit/java/fee.png"
     if os.path.exists(py_img_path) and os.path.exists(java_img_path):
         img_table_data = [
-            [Paragraph("<b>Figure A1: Python AST CFG (py2cfg)</b>", tbl_cell_bold), Paragraph("<b>Figure A2: Java Bytecode CFG (bytecode_cfg.py)</b>", tbl_cell_bold)],
+            [Paragraph("<b>Figure A2: Python AST CFG (py2cfg)</b>", tbl_cell_bold), Paragraph("<b>Figure A3: Java Bytecode CFG (bytecode_cfg.py)</b>", tbl_cell_bold)],
             [Image(py_img_path, width=2.4*inch, height=2.8*inch), Image(java_img_path, width=2.4*inch, height=2.8*inch)]
         ]
         t_img = Table(img_table_data, colWidths=[270, 270])
@@ -303,7 +324,7 @@ def build_pdf(filename="CS483_Assignment1_Report.pdf"):
     story.append(t_cc)
     story.append(Spacer(1, 3))
 
-    story.append(Paragraph("<b>Shared 8-Test Suite for CACC and RACC:</b> Because the minimal CACC row requirements for D1-D6 are fully subsumed within the RACC requirement sets, a single shared set of <b>8 test inputs</b> satisfies both CACC and RACC completely (100%). In the starter kit, they are implemented as separate classes: Python <code>test_cacc.py</code> and <code>test_racc.py</code>; Java <code>CorrelatedActiveClauseCoverageTest.java</code> and <code>RestrictedActiveClauseCoverageTest.java</code>.", body_style))
+    story.append(Paragraph("<b>Shared 8-Test Suite for CACC and RACC:</b> Because the minimal CACC row requirements for D1-D6 are fully subsumed within the RACC requirement sets, a single shared set of <b>8 test inputs</b> satisfies both CACC and RACC completely (100%). In the starter kit, they are implemented as separate classes: Python <code>test_cacc.py</code> and <code>test_racc.py</code> (implemented by Haider Ali Khan); Java <code>CorrelatedActiveClauseCoverageTest.java</code> and <code>RestrictedActiveClauseCoverageTest.java</code> (implemented by Muhammad Rayyan Bhatti).", body_style))
 
     racc_tbl_data = [
         [Paragraph("Test ID", tbl_header), Paragraph("Inputs (w, d, exp, mem)", tbl_header), Paragraph("D1..D6 Rows Traversed", tbl_header), Paragraph("Hand Calc. Expected", tbl_header), Paragraph("Active Clause Requirements Satisfied", tbl_header)],
@@ -473,9 +494,40 @@ def build_pdf(filename="CS483_Assignment1_Report.pdf"):
     # Group Contribution Statement
     # =========================================================================
     story.append(Paragraph("Group Contribution Statement", h1_style))
-    story.append(Paragraph("This assignment was completed individually by a single student. No second group member was present, assigned, or invented. All work across both Python (PyUnit) and Java (JUnit 4) - including control flow graph derivation, truth table generation, test suite implementation, tool verification, fault matrix execution, mutation testing, and analytical reporting - was designed, implemented, and verified entirely by the undersigned student. All numbers, matrices, and tool reports reflect genuine, reproducible experimental runs.", body_style))
-    story.append(Spacer(1, 3))
-    story.append(Paragraph("<b>Student Name:</b> Muhammad Rayyan Bhatti &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b>Student ID:</b> 04072312024<br/><b>Contribution:</b> 100% of Python &amp; Java suites, experimental analyses, and documentation.", body_style))
+    story.append(Paragraph("This assignment was completed collaboratively by a two-member team in accordance with the course specifications:", body_style))
+    story.append(Spacer(1, 2))
+    
+    contrib_data = [
+        [Paragraph("Team Member", tbl_header), Paragraph("Role &amp; Primary Language", tbl_header), Paragraph("Individual Technical Contributions", tbl_header), Paragraph("Share", tbl_header)],
+        [
+            Paragraph("<b>Haider Ali Khan</b>", tbl_cell_bold),
+            Paragraph("Python / PyUnit Lead", tbl_cell),
+            Paragraph("Implemented all 7 Python test suites (<code>test_nc.py</code> to <code>test_extra.py</code>); executed <code>py2cfg</code> AST CFG generation; performed <code>coverage.py</code> branch analysis; validated MC/DC requirements via <code>pymcdc</code>; conducted <code>mutmut 2.5.1</code> mutation experiments (NC and RACC); verified Python fault detection matrix.", tbl_cell),
+            Paragraph("<b>50%</b>", tbl_cell_bold)
+        ],
+        [
+            Paragraph("<b>Muhammad Rayyan Bhatti</b><br/>ID: 04072312024", tbl_cell_bold),
+            Paragraph("Java / JUnit 4 Lead", tbl_cell),
+            Paragraph("Implemented all 7 Java test suites (<code>NodeCoverageTest.java</code> to <code>ExtraTest.java</code>); executed <code>bytecode_cfg.py</code> Java bytecode CFG extraction; performed <code>JaCoCo</code> runtime bytecode branch instrumentation; implemented and executed Java <code>RunMatrix.java</code>; analyzed fault classifications and boundary minimality proofs.", tbl_cell),
+            Paragraph("<b>50%</b>", tbl_cell_bold)
+        ],
+        [
+            Paragraph("<b>Joint Collaboration</b>", tbl_cell_bold),
+            Paragraph("Both Members", tbl_cell),
+            Paragraph("Jointly derived the hand-modeled CFG (14 nodes, 17 edges); constructed truth tables for D1-D6; proved clause active conditions (CACC/RACC); verified 100% agreement between Python and Java fault matrices; co-authored academic report.", tbl_cell),
+            Paragraph("<b>100%</b>", tbl_cell_bold)
+        ]
+    ]
+    t_contrib = Table(contrib_data, colWidths=[95, 95, 310, 40])
+    t_contrib.setStyle(TableStyle([
+        ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor('#2b6cb0')),
+        ('GRID', (0, 0), (-1, -1), 0.5, colors.HexColor('#cbd5e0')),
+        ('VALIGN', (0, 0), (-1, -1), 'TOP'),
+        ('ALIGN', (3, 0), (3, -1), 'CENTER'),
+        ('TOPPADDING', (0, 0), (-1, -1), 2),
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 2),
+    ]))
+    story.append(t_contrib)
 
     doc.build(story, canvasmaker=NumberedCanvas)
     print(f"Report generated successfully: {filename}")
